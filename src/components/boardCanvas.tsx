@@ -70,12 +70,28 @@ const BoardCanvas: React.FC<CanvasProperties> = ({ board,
 
     }, [board, canvasCellSize, bacteriaRadius, bacteriaColor]);
 
+    const handleClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+        const rectangle = canvasReference.current.getBoundingClientRect()
+
+        const click_x_coordinate = event.clientX - rectangle.left
+        const click_y_coordinate = event.clientY - rectangle.top
+
+        const column = Math.floor(click_x_coordinate / canvasCellSize)
+        const row = Math.floor(click_y_coordinate / canvasCellSize)
+
+        if (column >= 0 && row >= 0 && column < board.width && row < board.height){
+            cellChangeFunction(row, column)
+        }
+    }
+
 
     return(
         <div>
             <canvas ref={canvasReference}
                     width={board.width * canvasCellSize}
-                    height={board.height * canvasCellSize}>
+                    height={board.height * canvasCellSize}
+                    onClick={handleClick}
+            >
 
             </canvas>
         </div>

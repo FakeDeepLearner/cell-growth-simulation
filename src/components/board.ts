@@ -73,23 +73,34 @@ class Board{
 
     //The reason that the function to fill cells is separate is because otherwise, when we traverse the grid,
     //a cell that was filled would also try to fill its adjacent cells.
-    private actuallyFillCells(): void{
+    private actuallyFillCells(): Board{
+        let newBoard = new Board(this.width, this.height)
         for (let i = 0; i < this.height; i++) {
             for (let j = 0; j < this.width; j++) {
-                if (this.cells[i][j].canBeFilled){
-                    this.cells[i][j].isFilled = true;
-                    this.numOfEmptyCells -= 1
+                if (this.cells[i][j].canBeFilled || this.cells[i][j].isFilled){
+                    newBoard.fillCell(i, j)
                 }
             }
 
         }
-        if(this.numOfEmptyCells === 0){
-            this._completelyFilled = true;
+        if(newBoard.numOfEmptyCells === 0){
+            newBoard.completelyFilled = true
         }
+
+        return newBoard
+    }
+
+    private fillCell(x:number, y:number){
+        this.cells[x][y].isFilled = true
+        this.numOfEmptyCells -= 1
     }
 
     get completelyFilled(): boolean {
         return this._completelyFilled;
+    }
+
+    set completelyFilled(value: boolean){
+        this._completelyFilled = value;
     }
 
     public isCellFilled(x:number, y:number) : boolean{
@@ -109,8 +120,7 @@ class Board{
     //Update the board, and return the updated board
     public doRenderLoop(): Board{
         this.markAdjacentCells()
-        this.actuallyFillCells()
-        return this
+        return this.actuallyFillCells()
     }
 
 
