@@ -5,6 +5,7 @@ import Buttons from "../other-components/buttons";
 import TickSlider from "../other-components/tickSlider";
 import BoardCanvas from "./boardCanvas";
 import DimensionChangeInputs from "../other-components/dimensionChangeInputs";
+import "./simulation.css"
 
 interface BoardProperties{
     height: number;
@@ -29,7 +30,7 @@ const Simulation : React.FC<SimulationProperties> = ({isRunning,
 
     const runningStateReference = useRef<boolean>(isRunning)
 
-    const intervalReference = useRef<number>(tickInterval)
+    const [currentInterval, setCurrentInterval] = useState<number>(tickInterval)
 
 
     const [boardProps, setBoardProps] =
@@ -52,14 +53,29 @@ const Simulation : React.FC<SimulationProperties> = ({isRunning,
     }, [boardProps]);
 
     const changeRunningState = () => {
+        if(!runningStateReference.current && simulationBoard.isEmpty()){
+            alert("Please fill at least one cell on the grid before starting the simulation")
+            return
+        }
         runningStateReference.current = !runningStateReference.current
     }
 
     const updateTickInterval = (newInterval: number) => {
-        intervalReference.current = newInterval
+        setCurrentInterval(newInterval)
     }
 
     const alterBoardDimensions = (width: number, height: number) => {
+        if(runningStateReference.current){
+            changeRunningState()
+            alert("You may not update the dimensions while the simulation is running\n" +
+                "The simulation has been paused")
+            return
+        }
+
+        if(simulationBoard.completelyFilled){
+            alert("The board is full, you can not change the dimensions of a full board")
+            return;
+        }
         setBoardProps(prevState => ({
             ...prevState,
             height: height,
@@ -69,10 +85,13 @@ const Simulation : React.FC<SimulationProperties> = ({isRunning,
 
     const doRenderLoop = () => {
         //Only execute the render loop if the application is in a "running" state
-        if(runningStateReference.current) {
-            let newBoard = simulationBoard.doRenderLoop()
-            setSimulationBoard(newBoard)
+        if(runningStateReference.current && !simulationBoard.completelyFilled) {
+            setSimulationBoard(prevBoard => {
+                return prevBoard.doRenderLoop()
+            })
+            console.log("Render loop executed")
         }
+
     }
 
     const resetSimulation = () => {
@@ -83,35 +102,46 @@ const Simulation : React.FC<SimulationProperties> = ({isRunning,
     }
 
     const handleCellClick = (row: number, column: number) => {
+        if(runningStateReference.current){
+            changeRunningState()
+            alert("You may not add or remove cells while the simulation is underway\n" +
+                "The simulation has been paused")
+        }
         setSimulationBoard(prevBoard => {
             return prevBoard.newBoardWithChangedCell(row, column);
         })
     }
 
     useEffect(() => {
-        const interval = setInterval(doRenderLoop, intervalReference.current * 1000)
+        const newInterval = setInterval(doRenderLoop, currentInterval * 1000)
 
         //Stop the render loop from executing
         return () => {
-            clearInterval(interval)
+            if(simulationBoard.completelyFilled){
+                clearInterval(newInterval)
+            }
         }
-
-    }, []);
+    }, [currentInterval]);
 
     return (
-        <div>
+        <div className="main_body">
             <Buttons
                 runningStateChangeFunction={changeRunningState}
                 resetFunction={resetSimulation}
-                isRunning={runningStateReference.current}></Buttons>
-            <TickSlider sliderChangeFunction={updateTickInterval}
+                isRunning={false}
+                ></Buttons>
+            <div className="lateral">
+                <TickSlider sliderChangeFunction={updateTickInterval}
                         initialValue={1} maxValue={20} minValue={1}></TickSlider>
-            <BoardCanvas board={simulationBoard}
-                         canvasCellSize={30} bacteriaRadius={10} bacteriaColor="red"
-                         cellChangeFunction={handleCellClick}></BoardCanvas>
-            <DimensionChangeInputs defaultWidth={boardProps.width}
+                <BoardCanvas board={simulationBoard}
+                             canvasWidth={500}
+                             canvasHeight={400}
+                             bacteriaColor={"red"} 
+                             cellChangeFunction={handleCellClick}></BoardCanvas>
+                <DimensionChangeInputs defaultWidth={boardProps.width}
                                    defaultHeight={boardProps.height}
                                    dimensionUpdateFunction={alterBoardDimensions}></DimensionChangeInputs>
+            </div>
         </div>
 
     )

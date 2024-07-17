@@ -106,6 +106,10 @@ class Board{
         this._completelyFilled = value;
     }
 
+    public isEmpty() {
+        return this.numOfEmptyCells === this.width * this.height
+    }
+
     public isCellFilled(x:number, y:number) : boolean{
         return this.cells[x][y].isFilled
     }

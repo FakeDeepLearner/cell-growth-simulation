@@ -14,6 +14,7 @@ const Buttons : React.FC<ButtonsProperties> = ({runningStateChangeFunction,
 
     const [running, setRunning] = useState<boolean>(isRunning)
 
+
     //Order matters here, we need to update the ref in the parent component (Simulation) first
     const handleStartOrPause = () =>{
         runningStateChangeFunction()

@@ -4,18 +4,19 @@
     flex-direction: column;
     gap: 30px;
     width: 10%;
+
 }
 
 .width_label{
     width: 80%;
-    height: 35%;
+    height: 20px;
     text-align: left;
     font-size: medium;
 }
 
 .height_label{
     width: 80%;
-    height: 35%;
+    height: 20px;
     text-align: left;
     font-size: medium;
 }
@@ -24,14 +25,14 @@
     width: 100%;
     height: inherit;
     border-radius: 4px;
-    border: black;
+    border: solid black;
 }
 
 .height_input{
     width: 100%;
     height: inherit;
     border-radius: 4px;
-    border: black;
+    border:solid black;
 }
 
 .enter_button{
@@ -39,5 +40,6 @@
     background-color:aqua;
     text-align: center;
     cursor: pointer;
+    margin-right: 30px;
 }
 

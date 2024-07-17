@@ -1,0 +1,12 @@
+.lateral{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.main_body{
+    display: flex;
+    flex-direction: column;
+    height: 700px;
+    gap: 200px
+}

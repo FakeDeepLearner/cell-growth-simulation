@@ -23,7 +23,7 @@ const TickSlider : React.FC<SliderProperties> = ({ sliderChangeFunction,
 
     return(
         <div className="slider-container">
-            <label htmlFor="slider">Tick Rate:</label><br/>
+            <h4>Tick rate</h4>
             <input type="range" min={minValue} max={maxValue} defaultValue={initialValue} className="slider"
             id="slider" onChange={handleSliderChange}/>
         </div>

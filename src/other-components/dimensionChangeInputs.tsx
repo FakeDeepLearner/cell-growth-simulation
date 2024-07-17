@@ -33,12 +33,12 @@ const DimensionChangeInputs : React.FC<ChangeInputProperties> = ({defaultWidth,
             <label className="width_label">
                 Width:
                 <br/>
-                <input className="width_input" type="number" value={width} onChange={handleUpdateWidth} min={1}/>
+                <input className="width_input" type="number" value={width} onChange={handleUpdateWidth} min="1"/>
             </label>
             <label className="height_label">
                 Height:
                 <br/>
-                <input className="height_input" type="number" value={height} onChange={handleUpdateHeight} min={1}/>
+                <input className="height_input" type="number" value={height} onChange={handleUpdateHeight} min="1"/>
             </label>
             <br/>
             <button className="enter_button" onClick={handleConfirmation}>Confirm</button>
