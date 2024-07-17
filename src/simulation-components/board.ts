@@ -1,5 +1,4 @@
 import Cell from "./cell"
-import cell from "./cell";
 
 class Board{
 
@@ -8,7 +7,7 @@ class Board{
     public height: number
 
     //Initialized indirectly
-    private readonly cells!: Cell[][]
+    private readonly cells: Cell[][]
 
     private numOfEmptyCells: number
 
@@ -18,17 +17,21 @@ class Board{
         this.height = height
         this.width = width
         this.numOfEmptyCells = height * width;
-        this.initializeCells()
+        this.cells = this.initializeCells()
 
     }
 
 
-    private initializeCells(){
+    private initializeCells(): Cell[][]{
+        let cells: Cell[][] = []
         for (let i = 0; i < this.height; i++) {
+            let row: Cell[] = []
             for (let j = 0; j < this.width; j++) {
-                this.cells[i][j] = new Cell();
+                row.push(new Cell())
             }
+            cells.push(row)
         }
+        return cells
     }
 
     // Get the adjacent cells of a cell at the specified position,

@@ -46,3 +46,5 @@ const DimensionChangeInputs : React.FC<ChangeInputProperties> = ({defaultWidth,
         </div>
     )
 }
+
+export default DimensionChangeInputs

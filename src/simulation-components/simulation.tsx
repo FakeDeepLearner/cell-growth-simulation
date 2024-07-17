@@ -1,6 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 
 import Board from "./board"
+import Buttons from "../other-components/buttons";
+import TickSlider from "../other-components/tickSlider";
+import BoardCanvas from "./boardCanvas";
+import DimensionChangeInputs from "../other-components/dimensionChangeInputs";
 
 interface BoardProperties{
     height: number;
@@ -64,8 +68,11 @@ const Simulation : React.FC<SimulationProperties> = ({isRunning,
     }
 
     const doRenderLoop = () => {
-        let newBoard = simulationBoard.doRenderLoop()
-        setSimulationBoard(newBoard)
+        //Only execute the render loop if the application is in a "running" state
+        if(runningStateReference.current) {
+            let newBoard = simulationBoard.doRenderLoop()
+            setSimulationBoard(newBoard)
+        }
     }
 
     const resetSimulation = () => {
@@ -81,8 +88,30 @@ const Simulation : React.FC<SimulationProperties> = ({isRunning,
         })
     }
 
+    useEffect(() => {
+        const interval = setInterval(doRenderLoop, intervalReference.current * 1000)
+
+        //Stop the render loop from executing
+        return () => {
+            clearInterval(interval)
+        }
+
+    }, []);
+
     return (
         <div>
+            <Buttons
+                runningStateChangeFunction={changeRunningState}
+                resetFunction={resetSimulation}
+                isRunning={runningStateReference.current}></Buttons>
+            <TickSlider sliderChangeFunction={updateTickInterval}
+                        initialValue={1} maxValue={20} minValue={1}></TickSlider>
+            <BoardCanvas board={simulationBoard}
+                         canvasCellSize={30} bacteriaRadius={10} bacteriaColor="red"
+                         cellChangeFunction={handleCellClick}></BoardCanvas>
+            <DimensionChangeInputs defaultWidth={boardProps.width}
+                                   defaultHeight={boardProps.height}
+                                   dimensionUpdateFunction={alterBoardDimensions}></DimensionChangeInputs>
         </div>
 
     )

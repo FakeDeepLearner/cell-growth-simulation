@@ -9,6 +9,7 @@
     font-size: small;
     background-color: gray;
     border: 3px solid black;
+    cursor: pointer;
 }
 
 .reset_button{
@@ -16,4 +17,5 @@
     font-size: small;
     background-color: gray;
     border: 3px solid black;
+    cursor: pointer;
 }
