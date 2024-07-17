@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 import Board from "./board"
 
@@ -7,28 +7,25 @@ interface BoardProperties{
     width: number;
 }
 
-interface SimulationProperties {
-    running: boolean;
-    paused: boolean;
-    tickInterval: number
-    boardProperties: BoardProperties
 
+
+interface SimulationProperties {
+    tickInterval: number
+    isRunning: boolean
+    boardProperties: BoardProperties
 }
 
 
 
 
-const Simulation : React.FC<SimulationProperties> = ({running,
-                                                         paused,
+const Simulation : React.FC<SimulationProperties> = ({isRunning,
                                                         tickInterval,
                                                          boardProperties
                                                       }) => {
-    const [isPaused, setIsPaused] = useState<boolean>(paused)
 
-    const [isRunning, setIsRunning] = useState<boolean>(running)
+    const runningStateReference = useRef<boolean>(isRunning)
 
-    const [interval, setInterval] = useState<number>(1)
-
+    const intervalReference = useRef<number>(tickInterval)
 
 
     const [boardProps, setBoardProps] =
@@ -50,16 +47,12 @@ const Simulation : React.FC<SimulationProperties> = ({running,
         renderBoard();
     }, [boardProps]);
 
-    const alterPaused = () => {
-        setIsPaused(!isPaused)
-    }
-
-    const alterRunning = () => {
-        setIsRunning(!isRunning)
+    const changeRunningState = () => {
+        runningStateReference.current = !runningStateReference.current
     }
 
     const updateTickInterval = (newInterval: number) => {
-        setInterval(newInterval)
+        intervalReference.current = newInterval
     }
 
     const alterBoardDimensions = (width: number, height: number) => {
@@ -78,23 +71,18 @@ const Simulation : React.FC<SimulationProperties> = ({running,
     const resetSimulation = () => {
         let newBoard = new Board(boardProps.width, boardProps.height)
         setSimulationBoard(newBoard)
-        setIsRunning(false)
-        setIsPaused(true)
+        runningStateReference.current = false
+
     }
 
     const handleCellClick = (row: number, column: number) => {
         setSimulationBoard(prevBoard => {
             return prevBoard.newBoardWithChangedCell(row, column);
         })
-
     }
 
     return (
         <div>
-            {running}
-            <div>
-                {paused}
-            </div>
         </div>
 
     )

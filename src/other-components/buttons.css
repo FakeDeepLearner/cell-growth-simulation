@@ -1,0 +1,19 @@
+.buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+}
+
+.start_button{
+    text-align: center;
+    font-size: small;
+    background-color: gray;
+    border: 3px solid black;
+}
+
+.reset_button{
+    text-align: center;
+    font-size: small;
+    background-color: gray;
+    border: 3px solid black;
+}

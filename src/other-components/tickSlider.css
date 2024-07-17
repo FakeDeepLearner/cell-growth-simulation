@@ -1,0 +1,10 @@
+.slider-container{
+    position: relative;
+    height: 25%;
+    background-color: aqua;
+}
+
+.slider{
+    transform: rotate(-90deg);
+
+}

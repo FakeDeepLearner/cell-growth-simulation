@@ -109,10 +109,24 @@ class Board{
 
     private alternateCellStatus(row: number, column: number) {
         this.cells[row][column].isFilled = !this.cells[row][column].isFilled
+        if (this.cells[row][column].isFilled){
+            this.numOfEmptyCells -= 1
+        }
+        else{
+            this.numOfEmptyCells += 1
+        }
     }
 
     public newBoardWithChangedCell(row:number, column: number): Board{
         let newBoard = new Board(this.width, this.height)
+        for (let i = 0; i < this.height; i++) {
+            for (let j = 0; j < this.width; j++) {
+                if(this.isCellFilled(i, j)){
+                    newBoard.fillCell(i, j)
+                }
+            }
+
+        }
         newBoard.alternateCellStatus(row, column)
         return newBoard
     }

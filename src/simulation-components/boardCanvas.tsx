@@ -1,6 +1,8 @@
 import React, {useEffect, useRef} from "react";
 import Board from "./board";
 
+import "./boardCanvas.css"
+
 interface CanvasProperties{
     board: Board
     //The width and height of each cell, in pixels
@@ -86,11 +88,12 @@ const BoardCanvas: React.FC<CanvasProperties> = ({ board,
 
 
     return(
-        <div>
+        <div className="canvas_container">
             <canvas ref={canvasReference}
                     width={board.width * canvasCellSize}
                     height={board.height * canvasCellSize}
                     onClick={handleClick}
+                    className="canvas"
             >
 
             </canvas>
