@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 
 import Board from "./board"
 import Buttons from "../other-components/buttons";
@@ -83,7 +83,7 @@ const Simulation : React.FC<SimulationProperties> = ({isRunning,
         }))
     }
 
-    const doRenderLoop = () => {
+    const doRenderLoop = useCallback(() => {
         //Only execute the render loop if the application is in a "running" state
         if(runningStateReference.current && !simulationBoard.completelyFilled) {
             setSimulationBoard(prevBoard => {
@@ -92,7 +92,7 @@ const Simulation : React.FC<SimulationProperties> = ({isRunning,
             console.log("Render loop executed")
         }
 
-    }
+    }, [])
 
     const resetSimulation = () => {
         let newBoard = new Board(boardProps.width, boardProps.height)
@@ -117,11 +117,10 @@ const Simulation : React.FC<SimulationProperties> = ({isRunning,
 
         //Stop the render loop from executing
         return () => {
-            if(simulationBoard.completelyFilled){
-                clearInterval(newInterval)
-            }
+            clearInterval(newInterval)
+            
         }
-    }, [currentInterval]);
+    }, [currentInterval, doRenderLoop]);
 
     return (
         <div className="main_body">
@@ -136,7 +135,7 @@ const Simulation : React.FC<SimulationProperties> = ({isRunning,
                 <BoardCanvas board={simulationBoard}
                              canvasWidth={500}
                              canvasHeight={400}
-                             bacteriaColor={"red"} 
+                             bacteriaColor={"red"}
                              cellChangeFunction={handleCellClick}></BoardCanvas>
                 <DimensionChangeInputs defaultWidth={boardProps.width}
                                    defaultHeight={boardProps.height}

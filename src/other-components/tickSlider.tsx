@@ -1,5 +1,5 @@
 import "./tickSlider.css"
-import React from "react";
+import React, {useState} from "react";
 
 
 interface SliderProperties{
@@ -11,19 +11,22 @@ interface SliderProperties{
 
 const TickSlider : React.FC<SliderProperties> = ({ sliderChangeFunction,
                                                     initialValue,
-                                                    maxValue, minValue
+                                                    maxValue,
+                                                     minValue
                                                  }) => {
 
+    const [currentValue, setCurrentValue] = useState<number>(initialValue)
 
     const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = Number(event.target.value)
         sliderChangeFunction(newValue)
+        setCurrentValue(newValue)
     }
 
 
     return(
         <div className="slider-container">
-            <h4>Tick rate</h4>
+            <h4>Tick rate: {currentValue} seconds</h4>
             <input type="range" min={minValue} max={maxValue} defaultValue={initialValue} className="slider"
             id="slider" onChange={handleSliderChange}/>
         </div>
