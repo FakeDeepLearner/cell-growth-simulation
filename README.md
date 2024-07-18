@@ -32,6 +32,7 @@ the board isn't rendered by rendering each cell individually. Instead, it is jus
 canvas after each render loop
 
 ## other-components
+
 This folder contains the components that enable the actual functionality. It contains the buttons to 
 start/pause and reset the simulation (buttons.tsx), the input fields to change the dimensions of the board 
 (dimensionChangeInputs.tsx) and the slider that allows the tick rate to be adjusted (tickSlider.tsx). 
