@@ -83,15 +83,6 @@ const BoardCanvas: React.FC<CanvasProperties> = ({ board,
 
         const column = Math.floor(click_x_coordinate / cellWidth)
         const row = Math.floor(click_y_coordinate / cellHeight)
-        console.log({
-            client_x: event.clientX,
-            client_y: event.clientY,
-            clicked_x: click_x_coordinate,
-            clicked_y: click_y_coordinate,
-            column_num: column,
-            row_num: row
-        })
-
         if (column >= 0 && row >= 0 && column < board.width && row < board.height){
             cellChangeFunction(row, column)
         }

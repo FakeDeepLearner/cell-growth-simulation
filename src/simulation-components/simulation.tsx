@@ -55,32 +55,41 @@ const Simulation : React.FC<SimulationProperties> = ({isRunning,
     const changeRunningState = () => {
         if(!runningStateReference.current && simulationBoard.isEmpty()){
             alert("Please fill at least one cell on the grid before starting the simulation")
-            return
+            return false
         }
-        runningStateReference.current = !runningStateReference.current
+        else {
+            runningStateReference.current = !runningStateReference.current
+            return true
+        }
     }
 
     const updateTickInterval = (newInterval: number) => {
         setCurrentInterval(newInterval)
     }
 
-    const alterBoardDimensions = (width: number, height: number) => {
+    const alterBoardDimensions = (width: number, height: number): boolean => {
+
         if(runningStateReference.current){
             changeRunningState()
             alert("You may not update the dimensions while the simulation is running\n" +
                 "The simulation has been paused")
-            return
+            return false;
         }
+        else {
 
-        if(simulationBoard.completelyFilled){
-            alert("The board is full, you can not change the dimensions of a full board")
-            return;
+            if (simulationBoard.completelyFilled) {
+                alert("The board is full, you can not change the dimensions of a full board")
+                return false;
+            }
+            else {
+                setBoardProps(prevState => ({
+                    ...prevState,
+                    height: height,
+                    width: width
+                }))
+                return true
+            }
         }
-        setBoardProps(prevState => ({
-            ...prevState,
-            height: height,
-            width: width
-        }))
     }
 
     const doRenderLoop = useCallback(() => {
@@ -107,9 +116,11 @@ const Simulation : React.FC<SimulationProperties> = ({isRunning,
             alert("You may not add or remove cells while the simulation is underway\n" +
                 "The simulation has been paused")
         }
-        setSimulationBoard(prevBoard => {
-            return prevBoard.newBoardWithChangedCell(row, column);
-        })
+        else {
+            setSimulationBoard(prevBoard => {
+                return prevBoard.newBoardWithChangedCell(row, column);
+            })
+        }
     }
 
     useEffect(() => {
@@ -131,7 +142,7 @@ const Simulation : React.FC<SimulationProperties> = ({isRunning,
                 ></Buttons>
             <div className="lateral">
                 <TickSlider sliderChangeFunction={updateTickInterval}
-                        initialValue={1} maxValue={20} minValue={1}></TickSlider>
+                        initialValue={1} maxValue={10} minValue={1}></TickSlider>
                 <BoardCanvas board={simulationBoard}
                              canvasWidth={500}
                              canvasHeight={400}

@@ -2,7 +2,7 @@ import "./buttons.css"
 import React, {useState} from "react";
 
 interface ButtonsProperties{
-    runningStateChangeFunction: () => void
+    runningStateChangeFunction: () => boolean
     resetFunction: () => void
     isRunning: boolean
 }
@@ -17,8 +17,10 @@ const Buttons : React.FC<ButtonsProperties> = ({runningStateChangeFunction,
 
     //Order matters here, we need to update the ref in the parent component (Simulation) first
     const handleStartOrPause = () =>{
-        runningStateChangeFunction()
-        setRunning(prev => !prev)
+        let changed = runningStateChangeFunction()
+        if(changed) {
+            setRunning(prev => !prev)
+        }
     }
 
     //Order matters here, for the same reason as above

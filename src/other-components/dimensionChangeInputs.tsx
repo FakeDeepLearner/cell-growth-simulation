@@ -17,11 +17,19 @@ const DimensionChangeInputs : React.FC<ChangeInputProperties> = ({defaultWidth,
     const [height, setHeight] = useState(defaultHeight)
 
     const handleUpdateWidth = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setWidth(Number(event.target.value))
+        let val =  Number(event.target.value)
+        if(val === 0){
+            setWidth(1)
+        }
+        setWidth(val)
     }
 
     const handleUpdateHeight = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setHeight(Number(event.target.value))
+        let val = Number(event.target.value)
+        if(val === 0){
+            setHeight(1)
+        }
+        setHeight(val)
     }
 
     const handleConfirmation = () => {
