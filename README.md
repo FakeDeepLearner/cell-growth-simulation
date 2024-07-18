@@ -6,8 +6,11 @@ a tick rate that can be adjusted to speed up or slow down the simulation (can be
 # Setting up and running locally
 
 ## Simply clone this repository 
-'git clone https://github.com/FakeDeepLearner/cell-growth-simulation'
+```
+git clone https://github.com/FakeDeepLearner/cell-growth-simulation
+```
 
 ## then, start the application locally by running
-
-'npm start'
+```
+npm start
+```
